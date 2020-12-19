@@ -4,27 +4,27 @@ const { addUrlParams, getUrlParams } = require('./browser');
 const getUserFriendlyError = require('./userfriendlyerror');
 
 /**
- * Select your Room name and identity (screen name).
- * @param $modal - modal for selecting your Room name and identity
+ * Select your Token and Room name.
+ * @param $modal - modal for selecting your Token and Room name
  * @param error - Error from the previous Room session, if any
  */
 function selectRoom($modal, error) {
   const $alert = $('div.alert', $modal);
   const $changeMedia = $('button.btn-dark', $modal);
-  const $identity = $('#screen-name', $modal);
-  const $join = $('button.btn-primary', $modal);
   const $roomName = $('#room-name', $modal);
+  const $join = $('button.btn-primary', $modal);
+  const $token = $('#token', $modal);
 
-  // If Room name is provided as a URL parameter, pre-populate the Room name field.
-  const { roomName } = getUrlParams();
-  if (roomName) {
-    $roomName.val(roomName);
+  // If Token is provided as a URL parameter, pre-populate the Token field.
+  const { token } = getUrlParams();
+  if (token) {
+    $token.val(token);
   }
 
   // If any previously saved user name exists, pre-populate the user name field.
-  const identity = localStorage.getItem('userName');
-  if (identity) {
-    $identity.val(identity);
+  const roomName = localStorage.getItem('roomName');
+  if (roomName) {
+    $roomName.val(roomName);
   }
 
   if (error) {
@@ -46,14 +46,14 @@ function selectRoom($modal, error) {
       });
 
       $join.click(function onJoin() {
-        const identity = $identity.val();
         const roomName = $roomName.val();
-        if (identity && roomName) {
-          // Append the Room name to the web application URL.
-          addUrlParams({ roomName });
+        const token = $token.val();
+        if (roomName && token) {
+          // Append the Token to the web application URL.
+          addUrlParams({ token });
 
           // Save the user name.
-          localStorage.setItem('userName', identity);
+          localStorage.setItem('roomName', roomName);
 
           $join.off('click', onJoin);
           $modal.modal('hide');
@@ -63,9 +63,9 @@ function selectRoom($modal, error) {
 
     $modal.on('hidden.bs.modal', function onHide() {
       $modal.off('hidden.bs.modal', onHide);
-      const identity = $identity.val();
       const roomName = $roomName.val();
-      resolve({ identity, roomName });
+      const token = $token.val();
+      resolve({ roomName, token });
     });
 
     $modal.modal({

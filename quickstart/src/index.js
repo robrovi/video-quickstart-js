@@ -83,20 +83,14 @@ async function selectAndJoinRoom(error = null) {
     deviceIds.video = null;
     return selectMicrophone();
   }
-  const { identity, roomName } = formData;
+  const { sessionName, token } = formData;
 
   try {
-    // Fetch an AccessToken to join the Room.
-    const response = await fetch(`/token?identity=${identity}`);
-
-    // Extract the AccessToken from the Response.
-    const token = await response.text();
-
     // Add the specified audio device ID to ConnectOptions.
     connectOptions.audio = { deviceId: { exact: deviceIds.audio } };
 
     // Add the specified Room name to ConnectOptions.
-    connectOptions.name = roomName;
+    connectOptions.name = sessionName;
 
     // Add the specified video device ID to ConnectOptions.
     connectOptions.video.deviceId = { exact: deviceIds.video };
