@@ -83,14 +83,14 @@ async function selectAndJoinRoom(error = null) {
     deviceIds.video = null;
     return selectMicrophone();
   }
-  const { sessionName, token } = formData;
+  const { roomName, token } = formData;
 
   try {
     // Add the specified audio device ID to ConnectOptions.
     connectOptions.audio = { deviceId: { exact: deviceIds.audio } };
 
     // Add the specified Room name to ConnectOptions.
-    connectOptions.name = sessionName;
+    connectOptions.name = roomName;
 
     // Add the specified video device ID to ConnectOptions.
     connectOptions.video.deviceId = { exact: deviceIds.video };
